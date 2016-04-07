@@ -30,14 +30,6 @@ namespace Nidalee
 
         public static Spell.Active R { get; private set; }
 
-        public static Spell.Active Q2 { get; private set; }
-
-        public static Spell.Active W2 { get; private set; }
-
-        public static Spell.Active E2 { get; private set; }
-
-        public static Spell.Active R2 { get; private set; }
-
         public static Menu ComboMenu { get; private set; }
 
         public static Menu DrawMenu { get; private set; }
@@ -85,10 +77,7 @@ namespace Nidalee
             W = new Spell.Skillshot(SpellSlot.W, 875, SkillShotType.Circular, 500, 1450, 100);
             E = new Spell.Targeted(SpellSlot.E, 600);
             R = new Spell.Active(SpellSlot.R);
-            Q2 = new Spell.Active(SpellSlot.Q);
-            W2 = new Spell.Active(SpellSlot.W);
-            E2 = new Spell.Active(SpellSlot.E);
-            R2 = new Spell.Active(SpellSlot.R);
+
 
             NidaMenu = MainMenu.AddMenu("Nidalee", "Nidalee");
             NidaMenu.AddGroupLabel("Nidalee Sexy Hunter");
