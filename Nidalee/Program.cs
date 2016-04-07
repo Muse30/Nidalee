@@ -79,7 +79,7 @@ namespace Nidalee
             {
                 return;
             }
-         
+
             Q = new Spell.Skillshot(SpellSlot.Q, 1500, SkillShotType.Linear, 125, 1300, 40);
             Q.AllowedCollisionCount = 0;
             W = new Spell.Skillshot(SpellSlot.W, 875, SkillShotType.Circular, 500, 1450, 100);
@@ -184,7 +184,7 @@ namespace Nidalee
             if (DrawMenu["drawQ"].Cast<CheckBox>().CurrentValue)
                 Drawing.DrawCircle(Player.Position, Q.Range, Color.Red);
 
-       
+
         }
 
 
@@ -227,11 +227,6 @@ namespace Nidalee
             if (!Player.IsMe) return;
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
             {
-                if (CougarForm && !E.IsReady() && Q.IsReady())
-                {
-                    Q.Cast();
-                }
-
                 if (CougarForm && E.IsReady())
                 {
 
@@ -242,7 +237,7 @@ namespace Nidalee
                 {
                     Core.DelayAction(() => castQtarget(target), 500);
                 }
-            
+
             }
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass) && HarassMenu["useQharass"].Cast<CheckBox>().CurrentValue && Player.Mana * 100 / Player.MaxHealth >= HarassMenu["manaharass"].Cast<Slider>().CurrentValue)
             {
@@ -279,38 +274,38 @@ namespace Nidalee
                     {
                         CastSpell(Q, x, predQ(), ComboMenu["maxGrab"].Cast<Slider>().CurrentValue);
                     }
-                }          
-            if (CougarForm && QhumanReady && R.IsReady() && Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.None) && AutoMenu["switchformks"].Cast<CheckBox>().CurrentValue)
-            {
-                foreach (var x in EntityManager.Heroes.Enemies.Where(x => x.IsValidTarget(Q.Range) && !x.IsZombie))
+                }
+                if (CougarForm && QhumanReady && R.IsReady() && Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.None) && AutoMenu["switchformks"].Cast<CheckBox>().CurrentValue)
                 {
-                    if (Qhumandamage(x) > x.Health)
+                    foreach (var x in EntityManager.Heroes.Enemies.Where(x => x.IsValidTarget(Q.Range) && !x.IsZombie))
                     {
-                        R.Cast(x);
+                        if (Qhumandamage(x) > x.Health)
+                        {
+                            R.Cast(x);
+                        }
+                    }
+                }
+                if (!CougarForm && E.IsReady() && HealMenu["heal"].Cast<CheckBox>().CurrentValue)
+                {
+                    foreach (var x in EntityManager.Heroes.Allies.Where(x => x.IsValidTarget(E.Range, false) && !x.IsZombie))
+                    {
+                        if (x.Health * 100 / x.MaxHealth <= HealMenu["lowhp"].Cast<Slider>().CurrentValue)
+                        {
+                            E.Cast(x);
+                        }
+                    }
+                }
+                if (CougarForm && EhumanReady && R.IsReady() && (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.None) && HealMenu["rtoheal"].Cast<CheckBox>().CurrentValue))
+                {
+                    foreach (var x in EntityManager.Heroes.Allies.Where(x => x.IsValidTarget(E.Range, false) && !x.IsZombie))
+                    {
+                        if (x.Health * 100 / x.MaxHealth <= HealMenu["lowhp"].Cast<Slider>().CurrentValue)
+                        {
+                            R.Cast(x);
+                        }
                     }
                 }
             }
-            if (!CougarForm && E.IsReady() && HealMenu["heal"].Cast<CheckBox>().CurrentValue)
-            {
-                foreach (var x in EntityManager.Heroes.Allies.Where(x => x.IsValidTarget(E.Range, false) && !x.IsZombie))
-                {
-                    if (x.Health * 100 / x.MaxHealth <= HealMenu["lowhp"].Cast<Slider>().CurrentValue)
-                    {
-                        E.Cast(x);
-                    }
-                }
-            }
-            if (CougarForm && EhumanReady && R.IsReady() && (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.None) && HealMenu["rtoheal"].Cast<CheckBox>().CurrentValue))
-            {
-                foreach (var x in EntityManager.Heroes.Allies.Where(x => x.IsValidTarget(E.Range, false) && !x.IsZombie))
-                {
-                    if (x.Health * 100 / x.MaxHealth <= HealMenu["lowhp"].Cast<Slider>().CurrentValue)
-                    {
-                        R.Cast(x);
-                    }
-                }
-            }
-      }
         }
 
         private static void JungleClear()
@@ -321,17 +316,17 @@ namespace Nidalee
                     .OrderByDescending(j => j.Health)
                     .FirstOrDefault(j => j.IsValidTarget(Q.Range));
             {
-            if (jgminion == null)return;
+                if (jgminion == null) return;
 
-            if (!CougarForm && Q.IsReady() && jgminion.IsValidTarget(Q.Range) && jgMenu["useqjgh"].Cast<CheckBox>().CurrentValue)
-            {
-                Q.Cast(jgminion);
-            }
+                if (!CougarForm && Q.IsReady() && jgminion.IsValidTarget(Q.Range) && jgMenu["useqjgh"].Cast<CheckBox>().CurrentValue)
+                {
+                    Q.Cast(jgminion);
+                }
 
-               if (!CougarForm && W.IsReady() && jgMenu["usewjgh"].Cast<CheckBox>().CurrentValue)
-            {
-                W.Cast(jgminion.Position);
-            }
+                if (!CougarForm && W.IsReady() && jgMenu["usewjgh"].Cast<CheckBox>().CurrentValue)
+                {
+                    W.Cast(jgminion.Position);
+                }
                 if (R.IsReady() && !Q.IsReady() && jgMenu["autoswitchclear"].Cast<CheckBox>().CurrentValue)
                 {
                     R.Cast();
@@ -344,14 +339,14 @@ namespace Nidalee
                 if ((CougarForm && W.IsReady() && jgminion.HasBuff("nidaleepassivehunted") && jgminion.IsValidTarget(W.Range) && jgMenu["usewjgc"].Cast<CheckBox>().CurrentValue))
                 {
                     W.Cast(jgminion);
-                }          
+                }
 
 
                 if ((CougarForm && E.IsReady() && jgminion.IsValidTarget(E.Range) && jgMenu["useejgc"].Cast<CheckBox>().CurrentValue))
-            {
-                E.Cast(jgminion);
+                {
+                    E.Cast(jgminion);
+                }
             }
-         }
         }
 
 
@@ -365,20 +360,20 @@ namespace Nidalee
                     R.Cast();
                 }
             }
-                     if (FleeMenu["wflee"].Cast<CheckBox>().CurrentValue && CougarForm)
-                        {
-                        var tempPos = Game.CursorPos;
-                        if (tempPos.IsInRange(Player.Position, W.Range))
-                        {
-                            W.Cast(tempPos);
-                        }
-                        else if (FleeMenu["wflee"].Cast<CheckBox>().CurrentValue && CougarForm)
-                        {
-                            W.Cast(Player.Position.Extend(tempPos, 800).To3DWorld());
-                        }
-                    }
+            if (FleeMenu["wflee"].Cast<CheckBox>().CurrentValue && CougarForm)
+            {
+                var tempPos = Game.CursorPos;
+                if (tempPos.IsInRange(Player.Position, W.Range))
+                {
+                    W.Cast(tempPos);
                 }
-        
+                else if (FleeMenu["wflee"].Cast<CheckBox>().CurrentValue && CougarForm)
+                {
+                    W.Cast(Player.Position.Extend(tempPos, 800).To3DWorld());
+                }
+            }
+        }
+
 
         private static void Harass()
         {
@@ -390,7 +385,7 @@ namespace Nidalee
                 {
                     if (!EloBuddy.Player.Instance.IsInAutoAttackRange(target))
                     {
-                        Q.Cast(target);
+                        CastSpell(Q, target, predQ(), ComboMenu["maxGrab"].Cast<Slider>().CurrentValue);
                     }
                     else if (target.NetworkId != target2.NetworkId)
                     {
@@ -410,7 +405,7 @@ namespace Nidalee
                 {
                     if (!EloBuddy.Player.Instance.IsInAutoAttackRange(target))
                     {
-                        Q.Cast(target);
+                        CastSpell(Q, target, predQ(), ComboMenu["maxGrab"].Cast<Slider>().CurrentValue);
                     }
                     else if (target.NetworkId != target2.NetworkId)
                     {
@@ -424,7 +419,10 @@ namespace Nidalee
                 var target = TargetSelector.GetTarget(W.Range, DamageType.Magical);
                 if (target.IsValidTarget() && !target.IsZombie)
                     W.Cast(target.Position);
+
             }
+
+
 
             if (!CougarForm && R.IsReady() && ComboMenu["useRalways"].Cast<CheckBox>().CurrentValue)
             {
@@ -459,7 +457,7 @@ namespace Nidalee
                 }
             }
 
- 
+
             if (CougarForm && W.IsReady() && ComboMenu["useWalways"].Cast<CheckBox>().CurrentValue)
             {
                 var heroes = EntityManager.Heroes.Enemies.Where(x => x.IsValidTarget() && !x.IsZombie && x.HasBuff("nidaleepassivehunted") && x.Distance(Player.Position) <= 750)
@@ -467,7 +465,9 @@ namespace Nidalee
                 foreach (var x in heroes)
                 {
                     W.Cast(x.Position);
+                    Q.Cast(x);
                     return;
+
                 }
                 var targets = EntityManager.Heroes.Enemies.Where(x => x.IsValidTarget() && !x.IsZombie && !x.HasBuff("nidaleepassivehunted") && x.Distance(Player.Position) <= 375 + Player.BoundingRadius)
                    .OrderByDescending(x => 1 - (x.Health - Wcougardamage(x) * 2 - Ecougardamage(x) - Qcougardamage(x)));
@@ -496,6 +496,7 @@ namespace Nidalee
                     W.Cast(x.Position);
                     return;
                 }
+
             }
             if (CougarForm && R.IsReady() && ComboMenu["useRbackhuman"].Cast<CheckBox>().CurrentValue)
             {
@@ -665,7 +666,7 @@ namespace Nidalee
                 }
                 var finalExtra = extraDmg <= 150f ? (extraDmg / 100f) : 1.5f;
 
-                if (target.HasBuff("nidaleepassivehunted"));
+                if (target.HasBuff("nidaleepassivehunted")) ;
                 {
                     return Player.CalculateDamageOnUnit(target, DamageType.Mixed,
                         (new[] { 0f, 5.3f, 26.7f, 66.7f, 120f }[R.Level] +
@@ -702,7 +703,7 @@ namespace Nidalee
             return Player.CalculateDamageOnUnit(target, DamageType.Magical,
                 new[] { 0, 70, 130, 190, 250 }[R.Level] + (Player.TotalMagicalDamage * 0.45f));
         }
-    
+
         public static void checkbuff()
         {
             String temp = "";
